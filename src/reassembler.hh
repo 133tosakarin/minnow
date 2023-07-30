@@ -3,7 +3,8 @@
 #include "byte_stream.hh"
 
 #include <string>
-
+#include <unordered_map>
+#include <list>
 class Reassembler
 {
 public:
@@ -31,4 +32,16 @@ public:
 
   // How many bytes are stored in the Reassembler itself?
   uint64_t bytes_pending() const;
+
+  private:
+    void popfrom_buffer(Writer& output);
+    void pushto_buffer(uint64_t st,std::string data);
+    //using Entry = std::pair<int,std::string>;
+    uint64_t bytes_pending_ = 0;
+    uint64_t first_unassembled_ = 0;
+    uint64_t first_unpopped_ = 0;
+    //std::unordered_map<uint64_t, std::string> buffer_{};
+    std::list<std::pair<uint64_t,std::string>> buffer_{};
+    bool eof_ =false;
+    
 };
